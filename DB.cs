@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +26,6 @@ public class DB : MonoBehaviour {
 	static Vector2[] LoadUV (string name)
 	{
 		string Pathf = "Assets/Add/Asset/UV/UV";
-		return ((Mesh)(AssetDatabase.LoadAssetAtPath(Pathf+name+".asset",typeof (Mesh)))).uv;
+		return ((Mesh)(AssetSystem.Load(Pathf+name+".asset",typeof (Mesh)))).uv;
 	}
 }

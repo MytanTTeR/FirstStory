@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ public class MeshExport : MonoBehaviour {
 				NewMesh.tangents = MainMesh.tangents;
 				NewMesh.Optimize();
 				NewMesh.RecalculateBounds();
-				AssetDatabase.CreateAsset(NewMesh, "Assets/Add/Asset/UV/" + GM[i].name + ".asset");
+				AssetSystem.Create(NewMesh, "Assets/Add/Asset/UV/" + GM[i].name + ".asset");
 			}
 			else{
 				NewMesh = GM[i].GetComponent<MeshFilter>().sharedMesh;

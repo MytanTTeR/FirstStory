@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -62,7 +61,7 @@ public class Test : MonoBehaviour {
 		NewMesh.RecalculateBounds();
 		NewMesh.RecalculateNormals();
 		NewMesh.Optimize();
-		AssetDatabase.CreateAsset(NewMesh, "Assets/Add/Asset/Mesh1.asset");
+		AssetSystem.Create(NewMesh, "Assets/Add/Asset/Mesh1.asset");
 
 	}
 	public void DrawBox(Vector3 Point){

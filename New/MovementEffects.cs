@@ -1,29 +1,48 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (AudioSource))]
 public class MovementEffects : MonoBehaviour {
 
-	public Transform PlayerHead;
-	public float ShakeForce;
 	public float RunForce;
 	public float StepLength;
-	bool StepRightLeg = true;
-	bool Step = true;
+	[HideInInspector]
+	public bool Step = false;
+	[HideInInspector]
+	public float timer = 0;
+	[HideInInspector]
+	public bool Sprint;
 
-	void Update ()
+
+	public virtual void StartEffect()
 	{
-		ShakeHead ();
+		Step = true;
+		timer = StepLength;
+	}
+	
+	public virtual void StopEffect()
+	{
+		Step = false;
+		timer = StepLength;
 	}
 
-	void ShakeHead ()
+	public virtual void NextStep()
 	{
-		Vector3 Rotation = PlayerHead.localEulerAngles;
-		if (!Step) Rotation.z += Mathf.Lerp (Rotation.z, 0, StepLength);
-		else {
-			if (StepRightLeg) Rotation.z += Mathf.Lerp (Rotation.z, ShakeForce, StepLength*Time.deltaTime);
-			else Rotation.z += Mathf.Lerp (Rotation.z, ShakeForce, StepLength);
-		}
-		PlayerHead.localEulerAngles = Rotation;
+		timer = StepLength;
+	}
+
+	void Update()
+	{
+		if (Input.GetKeyDown (KeyCode.LeftShift)) Sprint = true;
+		if (Input.GetKeyUp (KeyCode.LeftShift)) Sprint = false;
+		if (Input.GetKeyDown (KeyCode.W)) StartEffect ();
+		if (Input.GetKeyUp (KeyCode.W)) StopEffect ();
+		if (Step && timer <= 0) NextStep();
+		if (timer > 0) Effects();
+		if (timer > 0) timer -= Time.deltaTime * (Sprint ? RunForce : 1f);
+	}
+
+	public virtual void Effects()
+	{
+
 	}
 }
