@@ -18,52 +18,38 @@ public class WindingEffect : MovementEffects
 	{
 		position = GO.localPosition;
 	}
-	
-	void WindingHead ()
+
+	public override void Effect(float time, float SprintForce, bool Move)
 	{
 		Vector3 NewPos = GO.localPosition;
-		float X = Time.deltaTime / timer;
-//		float Y = Time.deltaTime / (StepLength - timer);
 		float ChangesX = 0, ChangesY = 0;
-		if (!Step) { 
-			if (HorisontalWinding) ChangesX -= NewPos.x * X; 
-			if (VerticalWinding) ChangesY += (position.y - NewPos.y) * X;
+		if (!Move) { 
+			if (HorisontalWinding) ChangesX -= NewPos.x * time; 
+			if (VerticalWinding) ChangesY += (position.y - NewPos.y) * time;
+			StepRightLeg = true;
 		}
 		else {
 			if (StepRightLeg) {
-				if (HorisontalWinding) ChangesX += ( - HorisontalWindingForce + position.x - NewPos.x) * X;
-				if (VerticalWinding) ChangesY += ( - VerticalWindingForce + position.y - NewPos.y) * X;
+				if (HorisontalWinding) ChangesX += ( - HorisontalWindingForce + position.x - NewPos.x) * time;
+				if (VerticalWinding) ChangesY += ( - VerticalWindingForce + position.y - NewPos.y) * time;
 			}
 			else {
-				if (HorisontalWinding) ChangesX += (HorisontalWindingForce + position.x - NewPos.x) * X; 
-				if (VerticalWinding) ChangesY += (VerticalWindingForce + position.y - NewPos.y) * X; 
+				if (HorisontalWinding) ChangesX += (HorisontalWindingForce + position.x - NewPos.x) * time; 
+				if (VerticalWinding) ChangesY += (VerticalWindingForce + position.y - NewPos.y) * time; 
 			}
 		}
-		if (Sprint) {
-			ChangesX /= RunForce;
-			ChangesY /= RunForce;
+		if (SprintForce != 0) {
+			ChangesX /= SprintForce;
+			ChangesY /= SprintForce;
 		}
-		NewPos.x += ChangesX;
-		NewPos.y += ChangesY;
+		NewPos += new Vector3 (ChangesX, ChangesY, 0);
 		GO.localPosition = NewPos;
 	}
-	
-	public override void StartEffect()
-	{
-		base.StartEffect ();
-		StepRightLeg = true;
-	}
-	
+
 	public override void NextStep()
 	{
-		base.NextStep ();
 		if (StepRightLeg) StepRightLeg = false;
 		else StepRightLeg = true;
 	}
-	
-	public override void Effects ()
-	{
-		base.Effects ();
-		WindingHead ();
-	}
+
 }

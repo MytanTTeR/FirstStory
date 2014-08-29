@@ -13,29 +13,18 @@ public class SoundEffect : MovementEffects {
 	{
 		Source = GetComponent<AudioSource>() ;
 	}
-
-	public override void StartEffect()
-	{
-		base.StartEffect ();
-		SoundID = 0;
-	}
 	
 	public override void NextStep()
 	{
-		base.NextStep ();
 		SoundID++;
 		if (SoundID >= Steps.Length) SoundID = 0;
-	}
-	
-	public override void Effects ()
-	{
-		Step ();
+		Source.PlayOneShot (Steps [SoundID]);
 	}
 
-	void Step ()
+
+	public override void Effect(float time, float SprintForce, bool Move)
 	{
-		if (Sprint) Source.pitch = RunForce;
+		if (SprintForce != 0) Source.pitch = SprintForce;
 		else Source.pitch = 1;
-		if (timer == StepLength) Source.PlayOneShot (Steps [SoundID]);
 	}
 }

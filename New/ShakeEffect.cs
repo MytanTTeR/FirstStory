@@ -7,38 +7,27 @@ public class ShakeEffect : MovementEffects
 	public float ShakeForce;
 	bool StepRightLeg;
 	float rotationZ = 0;
-	
-	void ShakeHead ()
+
+	public override void Effect(float time, float SprintForce, bool Move)
 	{
-		float X = Time.deltaTime / timer;
+		if (!Move) StepRightLeg = true;
 		float Changes = 0;
-		if (!Step) Changes -= rotationZ * X; 
+		if (!Move) Changes -= rotationZ * time; 
 		else {
-			if (StepRightLeg) Changes += (ShakeForce - rotationZ) * X; 
-			else Changes += (- ShakeForce - rotationZ) * X; 
+			if (StepRightLeg) Changes += (ShakeForce - rotationZ) * time; 
+			else Changes += (- ShakeForce - rotationZ) * time; 
 		}
-		if (Sprint) Changes /= RunForce;
+		if (SprintForce != 0) Changes /= SprintForce;
 		Vector3 Rotation = GO.localEulerAngles;
 		rotationZ += Changes;
 		Rotation.z = rotationZ;
 		GO.localEulerAngles = Rotation;
 	}
-	
-	public override void StartEffect()
-	{
-		base.StartEffect ();
-		StepRightLeg = true;
-	}
-	
+
 	public override void NextStep()
 	{
 		base.NextStep ();
 		if (StepRightLeg) StepRightLeg = false;
 		else StepRightLeg = true;
-	}
-	
-	public override void Effects ()
-	{
-		ShakeHead ();
 	}
 }
